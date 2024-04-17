@@ -1,0 +1,22 @@
+﻿@{
+  ViewData["Title"] = "Upload Resume";
+}
+<div class="card">
+  <h5 class="card-header">Resume</h5>
+  <div class="card-body">
+    <p class="card-text">
+      Kindly submit your most recent resume. We'll analyze it and generate potential interview questions tailored to both your resume and the job description.
+    </p>
+    <form asp-controller="Resume" asp-action="Upload" method="post">
+      <div>
+        <input class="form-control form-control-lg" id="formFileLg" type="file">
+      </div>
+
+      <div style="margin-top: 30px;">
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </div>
+      
+    </form>
+    
+  </div>
+</div>

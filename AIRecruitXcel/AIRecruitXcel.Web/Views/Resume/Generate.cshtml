@@ -1,0 +1,19 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+  <h3 class="display-4">Welcome</h3>
+  <h1 style="color: orangered;font-size:50pt">AIRecruitXcel</h1>
+</div>
+
+<div class="container text-center" style="margin-top: 200px;">
+  <div class="row">
+    <div class="col">
+      @Html.ActionLink("Upload Resume", "Upload", "Resume")
+    </div>
+    <div class="col">W
+      @Html.ActionLink("Generate Resume", "Generate", "Resume")
+    </div>
+  </div>
+</div>

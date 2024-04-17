@@ -1,0 +1,222 @@
+﻿@model InterviewViewModel
+
+@{
+  ViewData["Title"] = "Interview with AI";
+}
+<form method="post" enctype="multipart/form-data">
+
+
+  @if (Model.IsFinishedReview)
+  {
+    <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">Well done!</h4>
+      <p>Aww yeah, Congratulations on completing the interview session! You've demonstrated patience and relentless effort throughout this process. Whether the outcome meets your expectations or not, your participation and dedication mark significant progress in your personal development journey. Remember, every interview is an opportunity to learn and grow. Stay confident and keep refining your skills; success comes to those who persistently strive for it!</p>
+      <hr>
+      <p class="mb-0">Believe in yourself and keep pushing forward; success is just around the corner!</p>
+    </div>
+  }
+
+
+  <div class="row">
+    <div class="col">
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header">Job Description</h5>
+          <div class="card-body">
+            <div class="form-floating">
+              <textarea name="JobDescription" class="form-control" style="height: 570px">@Model.JobDescription</textarea>
+              <input type="hidden" name="JobDescription" value="@Model.JobDescription" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h5 class="card-header">Resume</h5>
+        <div class="card-body">
+
+          <div class="form-floating">
+            <textarea name="Resume" class="form-control" style="height: 500px">@Model.Resume</textarea>
+            <input type="hidden" name="Resume" value="@Model.Resume" />
+          </div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-10 me-auto">
+              <input class="form-control" name="ResumeFile" type="file" accept=".doc, .docx, .pdf, .txt" />
+            </div>
+            <div class="col-auto">
+              <button type="submit" name="Action" value="Upload" class="btn btn-secondary mb-3">Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-auto me-auto"></div>
+    <div class="col-auto">
+      <button type="submit" name="Action" value="Start" class="btn btn-lg btn-primary">Start Interview with 🤖</button>
+    </div>
+  </div>
+
+
+  @for (int i = 0; i < Model.Questions.Count; i++)
+  {
+    var question = Model.Questions[i];
+
+    <div class="card mt-3">
+      <h5 class="card-header">Question @(i + 1)</h5>
+      <div class="card-body">
+        <p class="card-text">
+          <button class="btnPlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+            </svg>
+          </button>
+          <span class="question_text">@question.Question</span>
+          <input type="hidden" name="Questions[@i].Question" value="@question.Question" />
+        </p>
+
+
+        <div>
+          <label for="answer" class="form-label">
+            Answer:
+            <button class="btnRecord">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+              </svg>
+            </button>
+
+            <button class="btnStop">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+                <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4 4 0 0 0 12 8V7a.5.5 0 0 1 1 0zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a5 5 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4m3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3" />
+                <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607m-7.84-9.253 12 12 .708-.708-12-12z" />
+              </svg>
+            </button>
+            @if (!Model.HintDisabled && !string.IsNullOrEmpty(question.Hint))
+            {
+              <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="@question.Hint">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                </svg>
+              </button>
+            }
+
+
+          </label>
+          <textarea class="form-control answer-control" name="Questions[@i].Answer" rows="6" @(Model.IsFinishedReview ? "disabled" : "")>@question.Answer</textarea>
+
+          @if (Model.IsFinishedReview && !string.IsNullOrEmpty(question.AIFeedback))
+          {
+            <div class="alert alert-primary mt-3" role="alert">
+              <span>🤖: </span><span>@Html.Raw(question.AIFeedback)</span>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  }
+
+  @if (!Model.IsFinishedReview && Model.Questions.Count > 0)
+  {
+    <div class="row mt-3">
+      <div class="col-auto me-auto"></div>
+      <div class="col-auto">
+        <button type="submit" name="Action" value="Finish" class="btn btn-lg btn-warning">⭐ Finish interview</button>
+      </div>
+    </div>
+  }
+
+  @if (!Model.HintDisabled && Model.IsFinishedReview && Model.Questions.Count > 0)
+  {
+    <partial name="_JobList" />
+  }
+  
+  <input type="hidden" name="HintDisabled" value="@Model.HintDisabled" />
+
+</form>
+
+
+
+@section Scripts {
+
+  <script>
+    // https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#speech_recognition
+    // Speech synthesis
+    // https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/
+    var utterThis;
+    const synth = window.speechSynthesis;
+    const pitch = 1;
+    const rate = 1;
+
+    const questions = document.querySelectorAll(".question_text");
+    const btnPlays = document.querySelectorAll(".btnPlay");
+    const btnRecords = document.querySelectorAll(".btnRecord");
+    const btnStops = document.querySelectorAll(".btnStop");
+    const answerControls = document.querySelectorAll(".answer-control");
+    var currentAnswerControl;
+
+    btnPlays.forEach(function (element, index) {
+      element.addEventListener('click', function (e) {
+        e.preventDefault();
+        const inputTxt = questions[index].innerText;
+        utterThis = new SpeechSynthesisUtterance(inputTxt);
+        utterThis.addEventListener("end", (event) => {
+          btnRecords[index].click();
+        })
+
+
+        utterThis.pitch = pitch;
+        utterThis.rate = rate;
+        synth.speak(utterThis);
+      });
+    });
+
+
+    // Speech recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+    const recognition = new SpeechRecognition();
+    // recognition.grammars = speechRecognitionList;
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+
+    btnRecords.forEach(function (element, index) {
+      element.addEventListener('click', function (e) {
+        e.preventDefault();
+        currentAnswerControl = answerControls[index];
+
+        recognition.start();
+      });
+    });
+
+    btnStops.forEach(function (element, index) {
+      element.addEventListener('click', function (e) {
+        e.preventDefault();
+        currentAnswerControl = answerControls[index];
+
+        recognition.stop();
+      });
+    });
+
+    recognition.onresult = event => {
+      const transcript = Array.from(event.results)
+        .map(result => result[0].transcript)
+        .join('');
+      currentAnswerControl.value = transcript;
+    }
+
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  </script>
+}

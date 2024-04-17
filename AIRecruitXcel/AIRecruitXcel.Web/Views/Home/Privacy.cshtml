@@ -1,0 +1,104 @@
+﻿@{
+  ViewData["Title"] = "Voice";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="card">
+  <h5 class="card-header">Question</h5>
+  <div class="card-body">
+    <p class="card-text">
+      <button id="play">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+        </svg>
+      </button>
+      <span id="question_text">Tell me about yourself.</span>
+    </p>
+
+
+    <div>
+      <label for="answer" class="form-label">
+        Answer:
+        <button id="record">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+          </svg>
+        </button>
+
+        <button id="stop-record">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+            <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4 4 0 0 0 12 8V7a.5.5 0 0 1 1 0zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a5 5 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4m3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3" />
+            <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607m-7.84-9.253 12 12 .708-.708-12-12z" />
+          </svg>
+        </button>
+      </label>
+      <textarea class="form-control" id="answer" rows="6"></textarea>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+  </div>
+</div>
+
+@section Scripts {
+
+  <script>
+    // Speech synthesis https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#speech_recognition
+    // https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/
+    const synth = window.speechSynthesis;
+
+    const inputTxt = document.querySelector("#question_text").innerText;
+    const pitch = 1;
+    const rate = 1;
+
+    const btnPlay = document.querySelector("#play");
+    const btnRecord = document.querySelector("#record");
+    const btnStopRecord = document.querySelector("#stop-record");
+
+    btnPlay.onclick = function () {
+      const utterThis = new SpeechSynthesisUtterance(inputTxt);
+      utterThis.addEventListener("end", (event) => {
+        btnRecord.click();
+      })
+
+      utterThis.pitch = pitch;
+      utterThis.rate = rate;
+      synth.speak(utterThis);
+    }
+
+ 
+
+    // Speech recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+    const recognition = new SpeechRecognition();
+    // recognition.grammars = speechRecognitionList;
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    const answerControl = document.querySelector("#answer");
+
+    btnRecord.onclick = function () {
+      recognition.start();
+    }
+
+    btnStopRecord.onclick = function () {
+      recognition.stop();
+    }
+
+    recognition.onresult = event => {
+      const transcript = Array.from(event.results)
+        .map(result => result[0].transcript)
+        .join('');
+      answerControl.value = transcript;
+    }
+
+  </script>
+
+}

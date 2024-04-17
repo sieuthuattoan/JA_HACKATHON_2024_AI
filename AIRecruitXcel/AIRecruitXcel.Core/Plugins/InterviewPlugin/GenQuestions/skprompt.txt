@@ -1,0 +1,8 @@
+﻿Base on this {{$jd}} and {{$resume}} suggest {{$number_of_questions}} questions for the interview. 
+Questions include techniques, solutions, behaviour as well as corporate culture.
+The questions complexity should fit for {{$level}}.
+Each question should be separated by {{$question_separator}}.
+Each question consists of 2 parts: Question and hint how to answer to that question. The question and hint must be separated by {{$hint_separator}}.
+
+Example for format answer:
+What is your name?||You can simply respond with your first name or your full name if you prefer.$$Tell me about yourself||When someone asks you to "tell me about yourself," it's an opportunity to provide a concise summary of your background, experiences, and interests

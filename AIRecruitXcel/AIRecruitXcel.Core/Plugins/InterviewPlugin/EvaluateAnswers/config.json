@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Generate interview question for practicing'",
+  "completion": {
+    "max_tokens": 100,
+    "temperature": 0.5,
+    "top_p": 0.0,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "jd",
+        "description": "Current recruiting job description",
+        "defaultValue": "",
+        "required": true
+      },
+      {
+        "name": "number_of_questions",
+        "description": "The number of sample questions that we want.",
+        "defaultValue": 8,
+        "required": true
+      },
+      {
+        "name": "level",
+        "description": "The level candidate want to apply junior/middle/senior etc.",
+        "defaultValue": "all level",
+        "required": true
+      },
+      {
+        "name": "$question_separator",
+        "description": "separator for each question",
+        "defaultValue": "**",
+        "required": true
+      },
+      {
+        "name": "resume",
+        "description": "Candidate's' resume.",
+        "defaultValue": "",
+        "required": true
+      }
+    ]
+  }
+}
